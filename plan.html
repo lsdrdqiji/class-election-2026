@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#03060d">
+<title>我的优势与愿望 · 交给我，你放100个percent心</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-layer" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+<div class="cursor-glow" id="glow" aria-hidden="true"></div>
+
+<div class="subpage">
+  <div class="wrap wrap-narrow">
+    <div class="sub-top rise rise-1">
+      <a href="index.html" class="back"><i>←</i> 返回首页</a>
+      <span class="sub-code">02 / STRENGTH &amp; WISH</span>
+    </div>
+
+    <main>
+      <div class="sec-head rise rise-2">
+        <span class="no">02</span>
+        <h1>我的优势与愿望</h1>
+        <span class="deco">STRENGTH / WISH</span>
+      </div>
+
+      <section class="panel prose rise rise-3">
+        <div class="block">
+          <h2>我的优势</h2>
+          <p>
+            在学生会担任学习部长期间，我长期对接老师、协调同学，打磨出充足的耐心与沟通协调能力。面对繁杂事务和突发状况，我习惯直面问题、沉着研判，主动沟通各方寻找最优解法，绝不回避拖延，把每一项服务工作落到实处。
+          </p>
+        </div>
+
+        <div class="block">
+          <h2>我的愿望</h2>
+          <p>
+            我始终希望能和各位同学并肩同行，共同营造积极向上、互帮互助、团结温暖的优良班级氛围。我立志做一名踏实靠谱、值得信赖的班级服务者，对待工作认真细致、精益求精，用行动兑现承诺，绝不辜负大家的信任与期待。
+          </p>
+        </div>
+      </section>
+
+      <div class="rise rise-4" style="margin-top:36px">
+        <a href="index.html" class="back"><i>←</i> 返回首页</a>
+      </div>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <span>CLASS / ELECTION · 2026</span>
+    <span>02 / 我的优势与愿望</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var glow = document.getElementById('glow');
+  var gx = 0, gy = 0, tx = 0, ty = 0, raf = null;
+  function loop() {
+    gx += (tx - gx) * 0.09; gy += (ty - gy) * 0.09;
+    glow.style.transform = 'translate3d(' + gx + 'px,' + gy + 'px,0)';
+    raf = requestAnimationFrame(loop);
+  }
+  window.addEventListener('pointermove', function (e) {
+    if (e.pointerType === 'touch') return;
+    tx = e.clientX; ty = e.clientY;
+    if (!document.body.classList.contains('has-pointer')) {
+      document.body.classList.add('has-pointer');
+      gx = tx; gy = ty;
+    }
+    if (!raf) loop();
+  }, { passive: true });
+})();
+</script>
+
+</body>
+</html>
