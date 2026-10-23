@@ -104,58 +104,8 @@
   </div>
 </div>
 
-<script>
-(function () {
-  /* ---------- 鼠标光晕 ---------- */
-  var glow = document.getElementById('glow');
-  var gx = 0, gy = 0, tx = 0, ty = 0, raf = null;
-
-  function loop() {
-    gx += (tx - gx) * 0.09;
-    gy += (ty - gy) * 0.09;
-    glow.style.transform = 'translate3d(' + gx + 'px,' + gy + 'px,0)';
-    raf = requestAnimationFrame(loop);
-  }
-
-  window.addEventListener('pointermove', function (e) {
-    if (e.pointerType === 'touch') return;
-    tx = e.clientX; ty = e.clientY;
-    if (!document.body.classList.contains('has-pointer')) {
-      document.body.classList.add('has-pointer');
-      gx = tx; gy = ty;
-    }
-    if (!raf) loop();
-  }, { passive: true });
-
-  /* ---------- 入口卡内部光斑跟随 ---------- */
-  document.querySelectorAll('.mat').forEach(function (card) {
-    card.addEventListener('pointermove', function (e) {
-      var r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-    });
-  });
-})();
-</script>
-
 <div class="flash-wipe" aria-hidden="true"></div>
-<script>
-(function () {
-  var leaving = false;
-  document.addEventListener('click', function (e) {
-    if (leaving) return;
-    var a = e.target.closest ? e.target.closest('a') : null;
-    if (!a) return;
-    var href = a.getAttribute('href');
-    if (!href || href.charAt(0) === '#' || /^(https?:|mailto:|tel:|javascript:)/i.test(href)) return;
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-    e.preventDefault();
-    leaving = true;
-    document.body.classList.add('leaving');
-    setTimeout(function () { location.href = href; }, 320);
-  }, false);
-})();
-</script>
+<script src="assets/motion.js"></script>
 
 </body>
 </html>

@@ -1763,3 +1763,158 @@ body.leaving::before{
     transparent 100%);
 }
 
+/* ============================================================
+   Motion v2 · 平滑动效层
+   ------------------------------------------------------------
+   核心思路：
+   1. 去掉「整页上窜 + 元素各自上窜」的双重位移，只保留一层轻推
+   2. 全部改用 easeOutExpo（起步快、收尾绵长），消除生硬急停
+   3. 只动 transform / opacity，且停掉逐帧重绘的 background-position
+   4. 离场改为「被轻轻推远」，用柔光覆盖代替硬扫光带
+   ============================================================ */
+:root{
+  --e-expo: cubic-bezier(.16, 1, .3, 1);   /* 主用：进场的绵长收尾 */
+  --e-soft: cubic-bezier(.25, .46, .45, .94);
+  --e-in:   cubic-bezier(.5, 0, .75, 0);   /* 离场：平滑加速 */
+  --e-io:   cubic-bezier(.65, 0, .35, 1);
+}
+
+/* ---------- 背景：缓慢呼吸，替代逐帧重绘网格 ---------- */
+.bg-layer{
+  animation: bgBreath 34s var(--e-io) infinite;
+}
+@keyframes bgBreath{
+  0%, 100%{ transform: scale(1)    translate3d(0, 0, 0); }
+  50%     { transform: scale(1.05) translate3d(-1.4%, -1.1%, 0); }
+}
+/* 原 gridDrift 每帧重绘 background-position，是掉帧主因，停掉 */
+.bg-grid{ animation: none; }
+
+/* ---------- 进场：轻推近，不再整页上窜 ---------- */
+.screen, .subpage{
+  animation: pageIn2 .8s var(--e-expo) both;
+  transform-origin: 50% 40%;
+  backface-visibility: hidden;
+}
+@keyframes pageIn2{
+  from{ opacity: 0; transform: scale(.986) translateY(7px); }
+  to  { opacity: 1; transform: scale(1)    translateY(0);   }
+}
+
+/* ---------- 元素编排：位移收窄到 12px，节奏更细 ---------- */
+.rise{ animation: riseIn2 .84s var(--e-expo) both; }
+@keyframes riseIn2{
+  from{ opacity: 0; transform: translateY(12px); }
+  to  { opacity: 1; transform: translateY(0);    }
+}
+.rise-1{ animation-delay: .05s; }
+.rise-2{ animation-delay: .11s; }
+.rise-3{ animation-delay: .18s; }
+.rise-4{ animation-delay: .25s; }
+.rise-5{ animation-delay: .32s; }
+
+/* ---------- 离场：被轻轻推远并淡出 ---------- */
+body.leaving{ pointer-events: none; }
+body.leaving .screen,
+body.leaving .subpage{
+  animation: pageOut2 .26s var(--e-in) both;
+}
+@keyframes pageOut2{
+  to{ opacity: 0; transform: scale(1.013); }
+}
+
+/* 柔光覆盖：去掉全屏 backdrop-filter（很吃 GPU），换柔和渐变 */
+body.leaving::before{
+  backdrop-filter: none;
+  background: linear-gradient(180deg, rgba(244, 249, 255, .55), rgba(226, 239, 254, .82));
+  animation: veilIn2 .24s var(--e-expo) both;
+}
+@keyframes veilIn2{ from{ opacity: 0; } to{ opacity: 1; } }
+
+/* 底部柔和泛光（替代原来的竖向硬扫光带） */
+.flash-wipe{
+  top: 0;
+  height: 100%;
+  mix-blend-mode: normal;
+  transform: none;
+  opacity: 0;
+  background: linear-gradient(0deg,
+    rgba(255, 255, 255, .80) 0%,
+    rgba(163, 208, 255, .42) 24%,
+    rgba(87, 182, 255, .16) 50%,
+    transparent 76%);
+}
+body.leaving .flash-wipe{
+  opacity: 1;
+  transform: none;
+  transition: opacity .26s var(--e-expo);
+}
+
+/* ---------- 点击涟漪：从手指/光标处柔和扩散 ---------- */
+.tap-ripple{
+  position: fixed;
+  width: 14px; height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 590;
+  transform: scale(0);
+  background: radial-gradient(circle,
+    rgba(26, 125, 250, .40) 0%,
+    rgba(87, 182, 255, .20) 44%,
+    rgba(87, 182, 255, 0) 70%);
+  animation: tapBurst .6s var(--e-expo) forwards;
+}
+@keyframes tapBurst{
+  0%  { transform: scale(0);  opacity: .95; }
+  100%{ transform: scale(24); opacity: 0;    }
+}
+
+/* ---------- 悬停：统一缓动，收尾更绵 ---------- */
+.mat{
+  transition: transform .46s var(--e-expo),
+              border-color .46s var(--e-expo),
+              box-shadow .46s var(--e-expo),
+              background .46s var(--e-expo);
+}
+.mat::before{ transition: opacity .5s var(--e-expo); }
+.mat-txt b, .mat-txt i{ transition: color .46s var(--e-expo); }
+.mat-no, .mat-go{
+  transition: background .42s var(--e-expo),
+              color .42s var(--e-expo),
+              transform .5s var(--e-expo),
+              opacity .42s var(--e-expo);
+}
+.mat::after{ transition: height .46s var(--e-expo); }
+.id-card{
+  transition: transform .85s var(--e-expo), box-shadow .85s var(--e-expo);
+}
+.back{ transition: color .38s var(--e-expo); }
+.btn-vote{
+  transition: transform .4s var(--e-expo),
+              box-shadow .5s var(--e-expo),
+              filter .4s var(--e-expo);
+}
+
+/* ---------- 档案卡扫描光带：放柔放慢 ---------- */
+.id-scan{
+  animation-duration: 7s;
+  animation-timing-function: cubic-bezier(.45, .05, .35, 1);
+}
+
+/* ---------- 去掉无谓的 GPU 开销（下方没有需要模糊的内容） ---------- */
+.tag{ backdrop-filter: none; }
+
+/* ---------- 子页滚动进场：更绵的收尾 ---------- */
+.reveal{ transition: opacity .92s var(--e-expo), transform .92s var(--e-expo); }
+.js .reveal:not(.in){ transform: translateY(22px); }
+
+/* ---------- 平滑滚动 ---------- */
+html{ scroll-behavior: smooth; }
+
+/* ---------- 尊重系统「减少动态效果」 ---------- */
+@media (prefers-reduced-motion: reduce){
+  .bg-layer, .bg-grid, .id-scan, .cue i{ animation: none !important; }
+  .tap-ripple{ display: none; }
+}
+
