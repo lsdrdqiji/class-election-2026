@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#03060d">
+<meta name="theme-color" content="#081226">
 <title>竞选自述 · 交给我，你放100个percent心</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
@@ -79,6 +79,25 @@
     }
     if (!raf) loop();
   }, { passive: true });
+})();
+</script>
+
+<div class="flash-wipe" aria-hidden="true"></div>
+<script>
+(function () {
+  var leaving = false;
+  document.addEventListener('click', function (e) {
+    if (leaving) return;
+    var a = e.target.closest ? e.target.closest('a') : null;
+    if (!a) return;
+    var href = a.getAttribute('href');
+    if (!href || href.charAt(0) === '#' || /^(https?:|mailto:|tel:|javascript:)/i.test(href)) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+    e.preventDefault();
+    leaving = true;
+    document.body.classList.add('leaving');
+    setTimeout(function () { location.href = href; }, 320);
+  }, false);
 })();
 </script>
 
