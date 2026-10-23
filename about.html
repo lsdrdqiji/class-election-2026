@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#03060d">
+<title>竞选自述 · 交给我，你放100个percent心</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-layer" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+<div class="cursor-glow" id="glow" aria-hidden="true"></div>
+
+<div class="subpage">
+  <div class="wrap wrap-narrow">
+    <div class="sub-top rise rise-1">
+      <a href="index.html" class="back"><i>←</i> 返回首页</a>
+      <span class="sub-code">01 / STATEMENT</span>
+    </div>
+
+    <main>
+      <div class="sec-head rise rise-2">
+        <span class="no">01</span>
+        <h1>竞选自述</h1>
+        <span class="deco">STATEMENT</span>
+      </div>
+
+      <div class="profile-strip rise rise-3">
+        <div class="profile-avatar">
+          <img src="assets/portrait-white.jpg" alt="竞选人证件照">
+        </div>
+        <div class="profile-meta">
+          <span class="k">CANDIDATE / 01</span>
+          <span class="v">团支部书记 · 学习委员</span>
+        </div>
+      </div>
+
+      <section class="panel prose rise rise-4">
+        <span class="quote-mark" aria-hidden="true">&ldquo;</span>
+        <p>
+          今天我竞选的岗位是团支部书记和学习委员。如果有幸当选团支书，我会扎实做好团务日常工作，精心组织团日活动，规范落实推优入党相关事务，耐心倾听、服务每一位团员；如果当选学习委员，我会延续之前学生会学习部长的经验，当好任课老师与同学们之间的桥梁，及时传达考试通知、汇总作业资料，主动带动咱们班优良学风。
+        </p>
+        <p>
+          无论最终是哪一个岗位，我都会认真履职、踏实负责，多倾听大家的想法，遇事一起商量，真心实意为咱们班出力！
+        </p>
+      </section>
+
+      <div class="rise rise-5" style="margin-top:36px">
+        <a href="index.html" class="back"><i>←</i> 返回首页</a>
+      </div>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <span>CLASS / ELECTION · 2026</span>
+    <span>01 / 竞选自述</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var glow = document.getElementById('glow');
+  var gx = 0, gy = 0, tx = 0, ty = 0, raf = null;
+  function loop() {
+    gx += (tx - gx) * 0.09; gy += (ty - gy) * 0.09;
+    glow.style.transform = 'translate3d(' + gx + 'px,' + gy + 'px,0)';
+    raf = requestAnimationFrame(loop);
+  }
+  window.addEventListener('pointermove', function (e) {
+    if (e.pointerType === 'touch') return;
+    tx = e.clientX; ty = e.clientY;
+    if (!document.body.classList.contains('has-pointer')) {
+      document.body.classList.add('has-pointer');
+      gx = tx; gy = ty;
+    }
+    if (!raf) loop();
+  }, { passive: true });
+})();
+</script>
+
+</body>
+</html>
