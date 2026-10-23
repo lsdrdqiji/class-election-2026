@@ -198,7 +198,7 @@ a{ color: inherit; text-decoration: none; }
   font-weight: 800;
   font-size: .88em;
   letter-spacing: -.01em;
-  padding: 0 .06em 0 0;
+  padding: 0 .06em 0 .05em;
   color: var(--cyan-soft);
   text-shadow: 0 0 26px rgba(34, 211, 238, .6);
 }
@@ -990,9 +990,12 @@ a{ color: inherit; text-decoration: none; }
 
 /* 滚动淡入 */
 .reveal{
+  transition: opacity 1s var(--ease), transform 1s var(--ease);
+}
+/* 只有确认 JS 可用时才隐藏，避免脚本异常导致内容永久空白 */
+.js .reveal:not(.in){
   opacity: 0;
   transform: translateY(34px);
-  transition: opacity 1s var(--ease), transform 1s var(--ease);
 }
 .reveal.in{
   opacity: 1;

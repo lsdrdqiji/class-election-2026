@@ -7,6 +7,7 @@
 <meta name="description" content="班委竞选 · 竞选团支部书记与学习委员">
 <title>交给我，你放100个percent心 · 班委竞选</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<script>document.documentElement.classList.add("js")</script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -161,6 +162,10 @@
   } else {
     items.forEach(function (el) { el.classList.add('in'); });
   }
+  /* 兜底：3 秒后无论如何都显示，避免任何环境下内容不可见 */
+  setTimeout(function () {
+    items.forEach(function (el) { el.classList.add('in'); });
+  }, 3000);
 })();
 </script>
 
