@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#03060d">
+<meta name="description" content="班委竞选 · 竞选团支部书记与学习委员">
+<title>交给我，你放100个percent心 · 班委竞选</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-layer" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+<div class="cursor-glow" id="glow" aria-hidden="true"></div>
+<div class="watermark" aria-hidden="true"><b></b>CLASS / ELECTION · 2026</div>
+
+<!-- ================= HERO ================= -->
+<header class="hero wrap">
+  <div class="hero-grid">
+    <div class="hero-main">
+      <span class="tag rise rise-1">2026 班委竞选</span>
+
+      <h1 class="hero-title rise rise-2">
+        <span class="l1">交给我，</span>
+        <span class="l2">你放<span class="num">100</span>个<em>percent</em>心</span>
+      </h1>
+
+      <p class="hero-sub rise rise-3">
+        竞选团支部书记 &amp; 学习委员。<br class="br-lg">
+        以责任立身，以服务立信——把每一件小事做实，把每一句承诺兑现。
+      </p>
+
+      <div class="hero-meta rise rise-4">
+        <span><i></i>团支部书记</span>
+        <span><i></i>学习委员</span>
+        <span><i></i>2026</span>
+      </div>
+    </div>
+
+    <aside class="id-card rise rise-3">
+      <div class="id-top">
+        <span>CANDIDATE / 01</span>
+        <span class="id-live"><i></i>LIVE</span>
+      </div>
+
+      <div class="id-photo">
+        <img src="assets/portrait-blue.jpg" alt="竞选人证件照" width="318" height="460">
+        <span class="id-scan" aria-hidden="true"></span>
+        <span class="id-grain" aria-hidden="true"></span>
+      </div>
+
+      <div class="id-data">
+        <div class="id-row">
+          <b>岗位</b>
+          <span>团支部书记 · 学习委员</span>
+        </div>
+        <div class="id-row">
+          <b>材料</b>
+          <span>自述 · 优势与愿望 · 投票</span>
+        </div>
+      </div>
+
+      <span class="id-corner tl" aria-hidden="true"></span>
+      <span class="id-corner tr" aria-hidden="true"></span>
+      <span class="id-corner bl" aria-hidden="true"></span>
+      <span class="id-corner br" aria-hidden="true"></span>
+    </aside>
+  </div>
+
+  <div class="scroll-cue rise rise-5" aria-hidden="true"><span>Scroll</span><i></i></div>
+</header>
+
+<div class="wrap"><hr class="rule"></div>
+
+<!-- ================= 三个栏目 ================= -->
+<section class="entries-block wrap">
+  <div class="entries-head reveal">
+    <h2>Materials / 竞选材料</h2>
+    <span>03 ITEMS</span>
+  </div>
+
+  <nav class="entries">
+    <a href="about.html" class="entry reveal">
+      <span class="idx">01</span>
+      <h3>竞选自述</h3>
+      <p>了解我的想法</p>
+      <span class="go">进入 <i>→</i></span>
+    </a>
+
+    <a href="plan.html" class="entry reveal">
+      <span class="idx">02</span>
+      <h3>我的优势与愿望</h3>
+      <p>初心与目标</p>
+      <span class="go">进入 <i>→</i></span>
+    </a>
+
+    <a href="vote.html" class="entry reveal">
+      <span class="idx">03</span>
+      <h3>投我一票</h3>
+      <p>支持我吧</p>
+      <span class="go">进入 <i>→</i></span>
+    </a>
+  </nav>
+</section>
+
+<footer class="foot">
+  <span>CLASS / ELECTION · 2026</span>
+  <span>交给我 · 你放100个percent心</span>
+</footer>
+
+<script>
+(function () {
+  /* ---------- 鼠标光晕 ---------- */
+  var glow = document.getElementById('glow');
+  var gx = 0, gy = 0, tx = 0, ty = 0, raf = null;
+
+  function loop() {
+    gx += (tx - gx) * 0.09;
+    gy += (ty - gy) * 0.09;
+    glow.style.transform = 'translate3d(' + gx + 'px,' + gy + 'px,0)';
+    raf = requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('pointermove', function (e) {
+    if (e.pointerType === 'touch') return;
+    tx = e.clientX; ty = e.clientY;
+    if (!document.body.classList.contains('has-pointer')) {
+      document.body.classList.add('has-pointer');
+      gx = tx; gy = ty;
+    }
+    if (!raf) loop();
+  }, { passive: true });
+
+  /* ---------- 卡片内部光斑跟随 ---------- */
+  document.querySelectorAll('.entry').forEach(function (card) {
+    card.addEventListener('pointermove', function (e) {
+      var r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  /* ---------- 滚动淡入 ---------- */
+  var items = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('in');
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+    items.forEach(function (el, i) {
+      el.style.transitionDelay = (i * 90) + 'ms';
+      io.observe(el);
+    });
+  } else {
+    items.forEach(function (el) { el.classList.add('in'); });
+  }
+})();
+</script>
+
+</body>
+</html>
